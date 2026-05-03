@@ -67,12 +67,31 @@
         margin-top: 5px;
         background: #ff3b30;
     }
+    .post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.thought-id {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.trash {
+    cursor: pointer;
+    font-size: 18px;
+}
 </style>
 </head>
 <body>
 
 <div class="container">
     <h1>🧠 Thought Diary</h1>
+<div id="totalCount" style="text-align:center; color:gray; margin-bottom:10px;">
+0 thoughts
+</div>
 
     <textarea id="thoughtInput" maxlength="500" placeholder="Write your thought..."></textarea>
     <div class="char-count" id="charCount">0 / 500</div>
@@ -91,22 +110,30 @@
     });
 
     function loadThoughts() {
-        const thoughts = JSON.parse(localStorage.getItem("thoughts")) || [];
-        postsDiv.innerHTML = "";
+    const thoughts = JSON.parse(localStorage.getItem("thoughts")) || [];
+    postsDiv.innerHTML = "";
 
-        thoughts.slice().reverse().forEach((t, index) => {
-            const div = document.createElement("div");
-            div.className = "post";
+    document.getElementById("totalCount").textContent = ${thoughts.length} thoughts;
 
-            div.innerHTML = `
-                <div class="date">${t.date}</div>
-                <div>${t.text}</div>
-                <button class="delete" onclick="deleteThought(${thoughts.length - 1 - index})">Delete</button>
-            `;
+    thoughts.slice().reverse().forEach((t, index) => {
+        const actualIndex = thoughts.length - 1 - index;
+        const thoughtNumber = actualIndex + 1;
 
-            postsDiv.appendChild(div);
-        });
-    }
+        const div = document.createElement("div");
+        div.className = "post";
+
+        div.innerHTML = `
+            <div class="post-header">
+                <div class="thought-id">T-${thoughtNumber}</div>
+                <div class="trash" onclick="deleteThought(${actualIndex})">🗑️</div>
+            </div>
+            <div class="date">${t.date}</div>
+            <div>${t.text}</div>
+        `;
+
+        postsDiv.appendChild(div);
+    });
+}
 
     function addThought() {
         const text = input.value.trim();
