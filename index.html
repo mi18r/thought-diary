@@ -152,11 +152,18 @@
     }
 
     function deleteThought(index) {
-        const thoughts = JSON.parse(localStorage.getItem("thoughts")) || [];
-        thoughts.splice(index, 1);
-        localStorage.setItem("thoughts", JSON.stringify(thoughts));
-        loadThoughts();
-    }
+    const confirmed = confirm("Are you sure you want to delete this thought?");
+
+    if (!confirmed) return;
+
+    const thoughts = JSON.parse(localStorage.getItem("thoughts")) || [];
+
+    thoughts.splice(index, 1);
+
+    localStorage.setItem("thoughts", JSON.stringify(thoughts));
+
+    loadThoughts();
+}
 
     loadThoughts();
 </script>
